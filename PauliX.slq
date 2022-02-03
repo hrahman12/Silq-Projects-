@@ -1,0 +1,8 @@
+def main() {
+    return PauliX();
+}
+
+def PauliX(){
+    x:=0:𝔹;
+    return X(x);
+}
