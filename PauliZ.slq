@@ -1,0 +1,9 @@
+def main(){
+    return PauliZ();
+}
+
+def PauliZ(){
+    z:=1:𝔹;
+    return Z(z);
+}
+
