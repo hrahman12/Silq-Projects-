@@ -1,0 +1,8 @@
+def main() {
+    return PauliY();
+}
+
+def PauliY(){
+    y:=1:𝔹;
+    return Y(y);
+}
