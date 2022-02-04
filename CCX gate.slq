@@ -1,0 +1,12 @@
+def main(){
+    return CCX(1:𝔹,1:𝔹,1:𝔹);
+}
+
+def CCX(const x:𝔹,const y:𝔹,z:𝔹):𝔹
+{
+    if x && y{
+        z:=X(z);
+    }
+
+    return (z);
+}
