@@ -1,0 +1,12 @@
+def main() {
+    return CZ(1:𝔹,1:𝔹);
+
+}
+
+def CZ(const x:𝔹,y:𝔹):𝔹{
+    if x{
+        y:=Z(y);
+    }
+
+    return y;
+}
