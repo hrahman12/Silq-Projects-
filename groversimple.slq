@@ -1,0 +1,80 @@
+// Grover's algorithm for a single solution
+// - Returns the only x for which f(x) = 1
+//
+// - More detailed description: https://www.scottaaronson.com/qclec/22.pdf
+
+
+def grover[n:!ℕ](f: const uint[n] !→ lifted 𝔹):!ℕ{ 
+	nIterations:= round(π / 4 * sqrt(2^n));
+	cand:=0:uint[n];
+    for k in [0..n) {cand[k] := H(cand[k]);} 
+	
+	for k in [0..nIterations){
+		if f(cand){
+			phase(π);
+		}		
+		// state ignoring normalization:   
+    	// ∑(v≠w)|v⟩ - |w*⟩
+		cand:=groverDiffusion(cand);  
+    	// ∑(v≠w)γ₋|v⟩ + γ₊|w*⟩
+	}
+	return measure(cand) as !ℕ;
+}
+
+/* EXAMPLE CALL */
+
+def main() {
+	f := λ(x:uint[5])lifted:𝔹{return x==3;}; // creates an oracle which outputs one only when x=3
+	x := grover(f); 
+	assert(x==3); // verifies that grover finds the right solution
+
+	return x;
+}
+
+// Grover Diffusion Operator
+
+def groverDiffusion[n:!ℕ](cand:uint[n])mfree: uint[n]{
+	for k in [0..n) { cand[k] := H(cand[k]); }
+	if cand!=0{ phase(π); }
+	for k in [0..n) { cand[k] := H(cand[k]); }
+	return cand;
+}
+
+
+/* TEST */
+
+// Random number generators
+
+def uniformInt(range:!ℕ){
+    // returns x~{0,...range-1}
+    n:=ceil(log(range)/log(2)) coerce !ℕ;
+    r:=range;
+    while (r>range-1) {
+        // rerolls r if it is greater than range
+        r=0;
+        for k in [0..n){
+            // rolls each bit of r
+            r+=2^k*rand();
+        }   
+    }
+    return r;
+}
+
+def rand(){
+    // quantum number generator
+    return measure(H(false));
+}
+
+
+
+// This function defines a test for Grover
+def test_grover() {
+	def f(x:uint[3])lifted:𝔹{
+    	return x==7;
+	} // creates an oracle which outputs one only when x=3
+	x := grover(f);
+	// verifies that grover finds the right solution
+	assert(x==7);
+
+	return x;
+}
